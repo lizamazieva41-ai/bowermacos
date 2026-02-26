@@ -1,9 +1,10 @@
-# 1. TIÊU CHUẨN BẢO MẬT
+# 1. TIÊU CHUẨN BẢO MẬT - PHIÊN BẢN MỞ RỘNG
 
 ## Authentication
 - JWT tokens với expiration
 - API keys với quyền hạn chế
 - Rate limiting per user
+- Account lockout after 5 failed attempts
 
 ## Network Security
 - HTTPS bắt buộc (production)
@@ -15,17 +16,46 @@
 |------|-------------|
 | Passwords | bcrypt |
 | API Keys | AES-256 |
-| Proxy Credentials | Encrypted storage |
+| Proxy Credentials | DPAPI encryption |
+| Database | SQLite encryption (optional) |
+
+## Rate Limiting
+```python
+# Example: FastAPI rate limiter
+from fastapi import FastAPI
+from slowapi import Limiter
+from slowapi.util import get_remote_address
+
+limiter = Limiter(key_func=get_remote_address)
+app = FastAPI()
+
+@app.post("/api/sessions/start")
+@limiter.limit("5/minute")
+async def create_session(request: Request):
+    # Only 5 requests per minute
+    pass
+```
+
+## Audit Logging
+- Authentication events (login, logout, failed)
+- Profile changes (create, update, delete)
+- Session events (start, stop, crash)
+- API access (all requests)
+- Error logging
+
+## TLS Configuration
+```bash
+# Production startup with TLS
+uvicorn main:app --host 0.0.0.0 --port 8000 \
+    --ssl-keyfile=./key.pem \
+    --ssl-certfile=./cert.pem
+```
 
 ## Browser Security
 - Isolated BrowserContext per profile
 - No Local Storage Leak
 - Stealth mode mặc định bật
 
-## Audit Logging
-- Authentication events
-- Profile changes
-- Session events
-- API access
+---
 
-*Document ID: ABB-V2-DOC-0901*
+*Document ID: ABB-V2-DOC-0901 v2*
