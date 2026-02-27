@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  bower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bower-browser
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+      - HOST=0.0.0.0
+      - DATA_DIR=/app/data
+      - LOGS_DIR=/app/logs
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-this-in-production}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - SSL_ENABLED=${SSL_ENABLED:-false}
+      - SSL_GENERATE=${SSL_GENERATE:-false}
+    volumes:
+      - bower_data:/app/data
+      - bower_logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '1'
+          memory: 2G
+    networks:
+      - bower-network
+
+volumes:
+  bower_data:
+    driver: local
+  bower_logs:
+    driver: local
+
+networks:
+  bower-network:
+    driver: bridge

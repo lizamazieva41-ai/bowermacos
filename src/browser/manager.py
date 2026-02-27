@@ -1,14 +1,23 @@
 """
 Browser Manager - Core module for managing headless browser instances.
 """
+
 import asyncio
 import logging
 from typing import Optional, Dict, Any, List
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
-from playwright.async_api import async_playwright, Browser, BrowserContext, Page, Playwright
+from playwright.async_api import (
+    async_playwright,
+    Browser,
+    BrowserContext,
+    Page,
+    Playwright,
+)
+
+from src.browser.stealth import get_combined_stealth_script
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +25,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ProfileConfig:
     """Configuration for a browser profile."""
+
     name: str
     user_agent: Optional[str] = None
     proxy: Optional[str] = None
@@ -33,6 +43,7 @@ class ProfileConfig:
 @dataclass
 class BrowserSession:
     """Represents an active browser session."""
+
     session_id: str
     profile_name: str
     started_at: datetime
@@ -60,10 +71,16 @@ class BrowserManager:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         await self.stop()
 
-    async def start(self):
+    async def start(self, dns_provider: str = "cloudflare"):
         """Initialize Playwright and browser."""
+        from src.proxy.dns_leak import DNSLeakProtector
+
         logger.info("Starting browser manager...")
         self.playwright = await async_playwright().start()
+
+        dns_protector = DNSLeakProtector(dns_provider)
+        dns_args = dns_protector.get_chromium_args()
+
         self.browser = await self.playwright.chromium.launch(
             headless=True,
             args=[
@@ -76,6 +93,7 @@ class BrowserManager:
                 "--no-zygote",
                 "--disable-gpu",
             ]
+            + dns_args,
         )
         logger.info("Browser started successfully")
 
@@ -94,7 +112,10 @@ class BrowserManager:
     def _build_launch_options(self, config: ProfileConfig) -> Dict[str, Any]:
         """Build browser context launch options."""
         options: Dict[str, Any] = {
-            "viewport": {"width": config.viewport_width, "height": config.viewport_height},
+            "viewport": {
+                "width": config.viewport_width,
+                "height": config.viewport_height,
+            },
             "ignore_https_errors": True,
         }
 
@@ -153,35 +174,8 @@ class BrowserManager:
 
     async def _apply_stealth(self, context: BrowserContext):
         """Apply stealth modifications to prevent detection."""
-        await context.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => undefined
-            });
-
-            Object.defineProperty(navigator, 'plugins', {
-                get: () => [1, 2, 3, 4, 5]
-            });
-
-            Object.defineProperty(navigator, 'languages', {
-                get: () => ['en-US', 'en']
-            });
-
-            const originalQuery = window.navigator.permissions.query;
-            window.navigator.permissions.query = (parameters) => (
-                parameters.name === 'notifications' ?
-                    Promise.resolve({ state: Notification.permission }) :
-                    originalQuery(parameters)
-            );
-
-            window.chrome = { runtime: {} };
-
-            Object.defineProperty(screen, 'availWidth', {
-                get: () => 1920
-            });
-            Object.defineProperty(screen, 'availHeight', {
-                get: () => 1080
-            });
-        """)
+        stealth_script = get_combined_stealth_script()
+        await context.add_init_script(stealth_script)
 
     async def close_session(self, session_id: str) -> bool:
         """Close a browser session."""
@@ -225,7 +219,9 @@ class BrowserManager:
             logger.error(f"Click error: {e}")
             raise
 
-    async def type_text(self, session_id: str, selector: str, text: str, timeout: int = 5000) -> bool:
+    async def type_text(
+        self, session_id: str, selector: str, text: str, timeout: int = 5000
+    ) -> bool:
         """Type text into an element."""
         session = self.sessions.get(session_id)
         if not session:
@@ -238,7 +234,9 @@ class BrowserManager:
             logger.error(f"Type error: {e}")
             raise
 
-    async def screenshot(self, session_id: str, path: str, full_page: bool = False) -> bool:
+    async def screenshot(
+        self, session_id: str, path: str, full_page: bool = False
+    ) -> bool:
         """Take a screenshot."""
         session = self.sessions.get(session_id)
         if not session:
