@@ -49,7 +49,6 @@ class Breadcrumb:
                     dpg.add_text(
                         self.separator_icon,
                         color=COLORS["text_muted"],
-                        font=12,
                     )
                 
                 if item.callback:

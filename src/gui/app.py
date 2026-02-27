@@ -44,7 +44,7 @@ class BowerApp:
                 dpg.add_theme_color(dpg.mvThemeCol_ChildBg, (30, 41, 59))
                 dpg.add_theme_color(dpg.mvThemeCol_FrameBg, (51, 65, 85))
                 dpg.add_theme_color(dpg.mvThemeCol_Button, (59, 130, 246))
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonHover, (37, 99, 235))
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, (37, 99, 235))
                 dpg.add_theme_color(dpg.mvThemeCol_Text, (226, 232, 240))
                 dpg.add_theme_color(dpg.mvThemeCol_Header, (51, 65, 85))
                 dpg.add_theme_color(dpg.mvThemeCol_TableHeaderBg, (51, 65, 85))

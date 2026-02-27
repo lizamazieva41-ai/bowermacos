@@ -36,11 +36,10 @@ class ProxiesPage:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Dashboard",
@@ -71,7 +70,7 @@ class ProxiesPage:
             dpg.add_separator()
 
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text("Connected", color=COLORS["success"])
 
             dpg.add_button(
@@ -87,13 +86,13 @@ class ProxiesPage:
             height=-1,
             border=False,
         ):
-            dpg.add_text("Proxies", font=28)
+            dpg.add_text("Proxies")
             dpg.add_text(
                 "Manage your proxy servers",
                 color=COLORS["text_secondary"],
             )
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Add New Proxy",
@@ -111,7 +110,7 @@ class ProxiesPage:
                 callback=self.check_health,
             )
 
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             with dpg.collapsing_header(label="Proxy Health Summary", default_open=True):
                 with dpg.group(horizontal=True):
@@ -122,7 +121,7 @@ class ProxiesPage:
                     dpg.add_text("  Unhealthy:", color=COLORS["text_secondary"])
                     dpg.add_text("0", tag="proxy_unhealthy_count", color=COLORS["danger"])
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.child_window(tag="proxies_list", height=-60):
                 dpg.add_text(
@@ -180,7 +179,7 @@ class ProxiesPage:
                 width=300,
                 password=True,
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Add Proxy",
@@ -362,7 +361,7 @@ class ProxiesPage:
                 tag="edit_proxy_active",
                 default_value=proxy.get("is_active", True),
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Save Changes",

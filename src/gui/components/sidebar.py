@@ -66,14 +66,13 @@ class CollapsibleSidebar:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
         else:
-            dpg.add_text("B", color=COLORS["primary"], font=24)
+            dpg.add_text("B", color=COLORS["primary"])
         
         dpg.add_separator()
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
     
     def _render_nav(self, current_page: str, on_navigate: callable):
         """Render navigation items."""
@@ -122,7 +121,7 @@ class CollapsibleSidebar:
         """Render sidebar footer."""
         if not self.is_collapsed:
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text("Connected", tag="sidebar_api_status", color=COLORS["success"])
             
             dpg.add_button(

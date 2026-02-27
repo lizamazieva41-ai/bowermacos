@@ -147,13 +147,13 @@ class EmptyState:
         tag = f"empty_{title.lower().replace(' ', '_')}"
         
         with dpg.group(horizontal=False):
-            dpg.add_text(icon, font=48)
-            dpg.add_text("", height=10)
-            dpg.add_text(title, font=18)
+            dpg.add_text(icon)
+            dpg.add_text(" ")
+            dpg.add_text(title)
             dpg.add_text(description, color=COLORS.get("text_secondary"))
             
             if action_label and action_callback:
-                dpg.add_text("", height=15)
+                dpg.add_text(" ")
                 dpg.add_button(
                     label=action_label,
                     callback=action_callback,
@@ -220,7 +220,7 @@ class Label:
         font = fonts.get(size, 14)
         text_color = colors.get(color, COLORS.get("text_primary"))
         
-        label = dpg.add_text(text, color=text_color, font=font)
+        label = dpg.add_text(text, color=text_colorfont)
         
         return str(label)
     
@@ -245,7 +245,7 @@ class Icon:
     @staticmethod
     def create(icon: str, size: int = 20, color: tuple = None) -> str:
         """Create an icon."""
-        icon_label = dpg.add_text(icon, font=size)
+        icon_label = dpg.add_text(iconsize)
         
         if color:
             dpg.configure_item(icon_label, color=color)
@@ -300,7 +300,7 @@ class Divider:
             modal=True,
         ):
             with dpg.group():
-                dpg.add_text("⏳", font=48)
+                dpg.add_text("⏳")
                 dpg.add_text(message)
         
         return str(overlay_tag)

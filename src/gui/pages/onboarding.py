@@ -38,21 +38,20 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("", height=40)
-            dpg.add_text("🌊 Welcome to Bower!", font=32, color=COLORS["primary"])
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
+            dpg.add_text("🌊 Welcome to Bower!", color=COLORS["primary"])
+            dpg.add_text(" ")
             dpg.add_text(
                 "Bower Antidetect Browser V2",
-                font=20,
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=30)
+            dpg.add_text(" ")
             dpg.add_text(
                 "A professional privacy browser automation system for managing anonymous browser profiles with advanced stealth capabilities.",
                 wrap=450,
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=40)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -123,17 +122,17 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("📧 Create Account", font=28)
-            dpg.add_text("", height=10)
+            dpg.add_text("📧 Create Account")
+            dpg.add_text(" ")
             
             self._render_progress_indicator()
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_text(
                 "Enter your email to create a free account.",
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             dpg.add_text("Email Address *", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -143,7 +142,7 @@ class OnboardingWizard:
                 hint="your@email.com",
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Username *", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -153,7 +152,7 @@ class OnboardingWizard:
                 hint="Choose a username",
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Password *", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -164,7 +163,7 @@ class OnboardingWizard:
                 hint="Min 8 characters",
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Confirm Password", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -174,7 +173,7 @@ class OnboardingWizard:
                 password=True,
             )
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -198,12 +197,12 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("🔐 Verify Email", font=28)
-            dpg.add_text("", height=10)
+            dpg.add_text("🔐 Verify Email")
+            dpg.add_text(" ")
             
             self._render_progress_indicator()
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_text(
                 f"We've sent a 6-digit verification code to:",
                 color=COLORS["text_secondary"],
@@ -211,9 +210,8 @@ class OnboardingWizard:
             dpg.add_text(
                 self.user_data.get("email", "your email"),
                 color=COLORS["primary"],
-                font=16,
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             dpg.add_text("Verification Code *", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -223,7 +221,7 @@ class OnboardingWizard:
                 hint="123456",
             )
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -237,7 +235,7 @@ class OnboardingWizard:
                     width=120,
                 )
             
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
             dpg.add_text(
                 "Didn't receive the code?",
                 color=COLORS["text_secondary"],
@@ -316,17 +314,17 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("🔗 API Setup", font=28)
-            dpg.add_text("", height=10)
+            dpg.add_text("🔗 API Setup")
+            dpg.add_text(" ")
             
             self._render_progress_indicator()
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_text(
                 "Configure the API server connection to get started.",
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             dpg.add_text("API Server URL", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -335,7 +333,7 @@ class OnboardingWizard:
                 width=400,
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Username", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -344,7 +342,7 @@ class OnboardingWizard:
                 width=200,
             )
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             
             dpg.add_text("Password", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -354,7 +352,7 @@ class OnboardingWizard:
                 password=True,
             )
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -378,17 +376,17 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("➕ Create First Profile", font=28)
-            dpg.add_text("", height=10)
+            dpg.add_text("➕ Create First Profile")
+            dpg.add_text(" ")
             
             self._render_progress_indicator()
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_text(
                 "Create your first browser profile to get started.",
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             dpg.add_text("Profile Name *", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -397,7 +395,7 @@ class OnboardingWizard:
                 width=300,
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Browser Engine", color=COLORS["text_secondary"])
             dpg.add_combo(
@@ -407,7 +405,7 @@ class OnboardingWizard:
                 width=200,
             )
             
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             dpg.add_text("Proxy (optional)", color=COLORS["text_secondary"])
             dpg.add_input_text(
@@ -417,7 +415,7 @@ class OnboardingWizard:
                 hint="http://proxy:port",
             )
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -446,15 +444,15 @@ class OnboardingWizard:
             pos=[200, 100],
             no_title_bar=True,
         ):
-            dpg.add_text("", height=40)
-            dpg.add_text("🎉 You're All Set!", font=32, color=COLORS["success"])
-            dpg.add_text("", height=30)
+            dpg.add_text(" ")
+            dpg.add_text("🎉 You're All Set!", color=COLORS["success"])
+            dpg.add_text(" ")
             
             dpg.add_text(
                 "Bower is ready to use! Here's what you can do:",
                 color=COLORS["text_secondary"],
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             features = [
                 "🌐 Manage multiple browser profiles",
@@ -467,7 +465,7 @@ class OnboardingWizard:
             for feature in features:
                 dpg.add_text(f"  {feature}")
             
-            dpg.add_text("", height=40)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(

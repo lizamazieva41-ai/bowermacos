@@ -114,18 +114,18 @@ class SessionDetailModal:
             
             dpg.add_separator()
             
-            dpg.add_text("Resource Usage", font=16)
+            dpg.add_text("Resource Usage")
             self._render_resource_usage(session)
             
             dpg.add_separator()
             
-            dpg.add_text("Fingerprint Status", font=16)
+            dpg.add_text("Fingerprint Status")
             self._render_fingerprint_status(session)
             
             dpg.add_separator()
             
-            dpg.add_text("Console Output (Real-time)", font=16)
-            dpg.add_text("", height=5)
+            dpg.add_text("Console Output (Real-time)")
+            dpg.add_text(" ")
             with dpg.child_window(tag="console_window", height=150):
                 dpg.add_input_text(
                     tag="session_console_output",
@@ -170,17 +170,17 @@ class SessionDetailModal:
     def _render_session_info(self, session: dict):
         """Render basic session info."""
         with dpg.child_window(width=280, height=180):
-            dpg.add_text("Session Information", font=16)
+            dpg.add_text("Session Information")
             dpg.add_separator()
             
             dpg.add_text("Session ID:", color=COLORS["text_secondary"])
             dpg.add_text(session.get("session_id", "")[:30])
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("Profile:", color=COLORS["text_secondary"])
             dpg.add_text(session.get("profile_name", "Unknown"))
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("Status:", color=COLORS["text_secondary"])
             status = session.get("status", "unknown")
             status_color = (
@@ -190,30 +190,30 @@ class SessionDetailModal:
             )
             dpg.add_text(status.capitalize(), color=status_color)
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("Started:", color=COLORS["text_secondary"])
             dpg.add_text(session.get("started_at", "")[:19])
     
     def _render_session_stats(self, session: dict):
         """Render session statistics."""
         with dpg.child_window(width=280, height=180):
-            dpg.add_text("Statistics", font=16)
+            dpg.add_text("Statistics")
             dpg.add_separator()
             
             dpg.add_text("URL:", color=COLORS["text_secondary"])
             url = session.get("current_url", "N/A")
             dpg.add_text(url[:40] + "..." if len(url) > 40 else url)
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("Page Title:", color=COLORS["text_secondary"])
             dpg.add_text(session.get("page_title", "N/A")[:40])
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("User Agent:", color=COLORS["text_secondary"])
             ua = session.get("user_agent", "N/A")
             dpg.add_text(ua[:35] + "..." if len(ua) > 35 else ua)
             
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
             dpg.add_text("Browser:", color=COLORS["text_secondary"])
             dpg.add_text(session.get("browser_engine", "chromium"))
     
@@ -233,7 +233,7 @@ class SessionDetailModal:
         ):
             dpg.add_text(f"{cpu_percent}%")
         
-        dpg.add_text("", height=5)
+        dpg.add_text(" ")
         dpg.add_text("Memory Usage:", color=COLORS["text_secondary"])
         
         memory_percent = min(memory_mb / 500 * 100, 100)

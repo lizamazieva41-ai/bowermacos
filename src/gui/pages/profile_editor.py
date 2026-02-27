@@ -111,8 +111,8 @@ class ProfileEditor:
     
     def _render_progress_bar(self):
         """Render progress bar for wizard."""
-        dpg.add_text(f"Step {self.current_step + 1} of {self.total_steps}", font=14)
-        dpg.add_text("", height=5)
+        dpg.add_text(f"Step {self.current_step + 1} of {self.total_steps}")
+        dpg.add_text(" ")
         
         progress = (self.current_step + 1) / self.total_steps
         with dpg.progress_bar(
@@ -123,7 +123,7 @@ class ProfileEditor:
         ):
             dpg.add_text(f"{int(progress * 100)}%")
         
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
     
     def _create_wizard_sidebar(self):
         """Create wizard step sidebar."""
@@ -168,8 +168,8 @@ class ProfileEditor:
     
     def _render_basic_step(self, profile: dict):
         """Render Basic Info step."""
-        dpg.add_text("📋 Basic Information", font=24)
-        dpg.add_text("", height=15)
+        dpg.add_text("📋 Basic Information")
+        dpg.add_text(" ")
         
         dpg.add_text("Profile Name *", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -178,7 +178,7 @@ class ProfileEditor:
             width=400,
             hint="Enter profile name",
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Description", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -189,7 +189,7 @@ class ProfileEditor:
             hint="Optional description",
             multiline=True,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Use Case", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -201,8 +201,8 @@ class ProfileEditor:
     
     def _render_browser_step(self, profile: dict):
         """Render Browser step."""
-        dpg.add_text("🌐 Browser Settings", font=24)
-        dpg.add_text("", height=15)
+        dpg.add_text("🌐 Browser Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Browser Engine", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -211,7 +211,7 @@ class ProfileEditor:
             default_value=profile.get("browser_engine", "chromium"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("User Agent", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -222,7 +222,7 @@ class ProfileEditor:
             hint="Leave empty for auto-generated",
             multiline=True,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_checkbox(
             tag="wizard_headless",
@@ -232,8 +232,8 @@ class ProfileEditor:
     
     def _render_proxy_step(self, profile: dict):
         """Render Proxy step."""
-        dpg.add_text("🔗 Proxy Configuration", font=24)
-        dpg.add_text("", height=15)
+        dpg.add_text("🔗 Proxy Configuration")
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy URL", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -242,7 +242,7 @@ class ProfileEditor:
             width=400,
             hint="http://proxy:port or socks5://proxy:port",
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy Type", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -251,7 +251,7 @@ class ProfileEditor:
             default_value="http",
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Username (optional)", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -259,7 +259,7 @@ class ProfileEditor:
             default_value=profile.get("proxy_username", ""),
             width=300,
         )
-        dpg.add_text("", height=5)
+        dpg.add_text(" ")
         
         dpg.add_text("Password (optional)", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -271,8 +271,8 @@ class ProfileEditor:
     
     def _render_advanced_step(self, profile: dict):
         """Render Advanced step."""
-        dpg.add_text("⚡ Advanced Settings", font=24)
-        dpg.add_text("", height=15)
+        dpg.add_text("⚡ Advanced Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Resolution", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -281,7 +281,7 @@ class ProfileEditor:
             default_value=profile.get("resolution", "1920x1080"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Timezone", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -290,7 +290,7 @@ class ProfileEditor:
             default_value=profile.get("timezone", "System"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Language", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -300,7 +300,7 @@ class ProfileEditor:
             width=200,
         )
         
-        dpg.add_text("", height=15)
+        dpg.add_text(" ")
         
         dpg.add_checkbox(
             tag="wizard_stealth_canvas",
@@ -316,23 +316,23 @@ class ProfileEditor:
     
     def _render_review_step(self, profile: dict):
         """Render Review step."""
-        dpg.add_text("✅ Review & Create", font=24)
-        dpg.add_text("", height=15)
+        dpg.add_text("✅ Review & Create")
+        dpg.add_text(" ")
         
         name = dpg.get_value("wizard_profile_name") or profile.get("name", "Unnamed")
         browser = dpg.get_value("wizard_browser_engine") or profile.get("browser_engine", "chromium")
         proxy = dpg.get_value("wizard_proxy") or profile.get("proxy", "None")
         headless = dpg.get_value("wizard_headless")
         
-        dpg.add_text("Profile Summary", font=18)
-        dpg.add_text("", height=10)
+        dpg.add_text("Profile Summary")
+        dpg.add_text(" ")
         
         dpg.add_text(f"Name: {name}", color=COLORS["text_secondary"])
         dpg.add_text(f"Browser: {browser}", color=COLORS["text_secondary"])
         dpg.add_text(f"Headless: {'Yes' if headless else 'No'}", color=COLORS["text_secondary"])
         dpg.add_text(f"Proxy: {proxy[:50]}..." if len(proxy) > 50 else f"Proxy: {proxy}", color=COLORS["text_secondary"])
         
-        dpg.add_text("", height=20)
+        dpg.add_text(" ")
         dpg.add_text("✓ All settings configured", color=COLORS["success"])
     
     def _next_step(self):
@@ -400,7 +400,7 @@ class ProfileEditor:
             width=180,
             height=480,
         ):
-            dpg.add_text("Settings", font=18)
+            dpg.add_text("Settings")
             dpg.add_separator()
             
             tabs = [
@@ -450,8 +450,8 @@ class ProfileEditor:
     
     def _render_basic_tab(self, profile: dict):
         """Render Basic Info tab."""
-        dpg.add_text("Basic Information", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Basic Information")
+        dpg.add_text(" ")
         
         dpg.add_text("Profile Name *", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -460,7 +460,7 @@ class ProfileEditor:
             width=400,
             hint="Enter profile name",
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Description", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -471,7 +471,7 @@ class ProfileEditor:
             hint="Optional description",
             multiline=True,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Use Case", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -483,8 +483,8 @@ class ProfileEditor:
     
     def _render_browser_tab(self, profile: dict):
         """Render Browser tab."""
-        dpg.add_text("Browser Settings", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Browser Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Browser Engine", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -493,7 +493,7 @@ class ProfileEditor:
             default_value=profile.get("browser_engine", "chromium"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("User Agent", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -504,7 +504,7 @@ class ProfileEditor:
             hint="Leave empty for auto-generated",
             multiline=True,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_checkbox(
             tag="profile_headless",
@@ -514,8 +514,8 @@ class ProfileEditor:
     
     def _render_display_tab(self, profile: dict):
         """Render Display tab."""
-        dpg.add_text("Display Settings", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Display Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Resolution", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -524,7 +524,7 @@ class ProfileEditor:
             default_value=profile.get("resolution", "1920x1080"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Timezone", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -543,7 +543,7 @@ class ProfileEditor:
             default_value=profile.get("timezone", "System"),
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Language", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -555,8 +555,8 @@ class ProfileEditor:
     
     def _render_network_tab(self, profile: dict):
         """Render Network tab (Proxy)."""
-        dpg.add_text("Network Settings", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Network Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -565,7 +565,7 @@ class ProfileEditor:
             width=400,
             hint="http://proxy:port or socks5://proxy:port",
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy Type", color=COLORS["text_secondary"])
         dpg.add_combo(
@@ -574,7 +574,7 @@ class ProfileEditor:
             default_value="http",
             width=200,
         )
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy Username", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -582,7 +582,7 @@ class ProfileEditor:
             default_value=profile.get("proxy_username", ""),
             width=300,
         )
-        dpg.add_text("", height=5)
+        dpg.add_text(" ")
         
         dpg.add_text("Proxy Password", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -594,8 +594,8 @@ class ProfileEditor:
     
     def _render_security_tab(self, profile: dict):
         """Render Security tab."""
-        dpg.add_text("Security & Stealth Settings", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Security & Stealth Settings")
+        dpg.add_text(" ")
         
         dpg.add_text("Fingerprint Protection", color=COLORS["text_secondary"])
         
@@ -629,7 +629,7 @@ class ProfileEditor:
             default_value=profile.get("stealth_fonts", True),
         )
         
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_checkbox(
             tag="profile_hide_webdriver",
@@ -645,8 +645,8 @@ class ProfileEditor:
     
     def _render_advanced_tab(self, profile: dict):
         """Render Advanced tab."""
-        dpg.add_text("Advanced Settings", font=20)
-        dpg.add_text("", height=10)
+        dpg.add_text("Advanced Settings")
+        dpg.add_text(" ")
         
         dpg.add_checkbox(
             tag="profile_hardware_acceleration",
@@ -660,7 +660,7 @@ class ProfileEditor:
             default_value=profile.get("auto_update", True),
         )
         
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Custom Launch Arguments", color=COLORS["text_secondary"])
         dpg.add_input_text(
@@ -672,7 +672,7 @@ class ProfileEditor:
             multiline=True,
         )
         
-        dpg.add_text("", height=10)
+        dpg.add_text(" ")
         
         dpg.add_text("Custom JavaScript", color=COLORS["text_secondary"])
         dpg.add_input_text(

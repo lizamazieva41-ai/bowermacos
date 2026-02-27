@@ -83,7 +83,6 @@ class Pagination:
                 dpg.add_text(
                     f"({self.total_items} items)",
                     color=COLORS["text_muted"],
-                    font=12,
                 )
         
         return container_tag
@@ -181,7 +180,6 @@ class PaginationInfo:
             info_text,
             tag=tag,
             color=COLORS["text_muted"],
-            font=12,
         )
 
 

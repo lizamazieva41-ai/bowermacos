@@ -80,10 +80,10 @@ class Modal:
                         default_value=field.get("default", False),
                     )
                 
-                dpg.add_text("", height=5)
+                dpg.add_text(" ")
             
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -118,7 +118,7 @@ class ConfirmDialog:
         
         with dpg.modal(tag=tag, label=title, width=400, height=150):
             dpg.add_text(message, wrap=350)
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 variant_colors = {

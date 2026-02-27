@@ -36,11 +36,10 @@ class ProfilesPage:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Dashboard",
@@ -71,7 +70,7 @@ class ProfilesPage:
             dpg.add_separator()
 
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text("Connected", color=COLORS["success"])
 
             dpg.add_button(
@@ -87,13 +86,13 @@ class ProfilesPage:
             height=-1,
             border=False,
         ):
-            dpg.add_text("Profiles", font=28)
+            dpg.add_text("Profiles")
             dpg.add_text(
                 "Manage your browser profiles",
                 color=COLORS["text_secondary"],
             )
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Create New Profile",
@@ -111,7 +110,7 @@ class ProfilesPage:
                 callback=self.refresh,
             )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.child_window(tag="profiles_list", height=-60):
                 dpg.add_text(
@@ -181,7 +180,7 @@ class ProfilesPage:
                 tag="new_profile_headless",
                 default_value=True,
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Create",
@@ -343,7 +342,7 @@ class ProfilesPage:
                 tag="edit_profile_headless",
                 default_value=profile.get("headless", True),
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Save Changes",
@@ -388,9 +387,9 @@ class ProfilesPage:
                 width=400,
                 height=200,
             )
-            dpg.add_text("", height=10)
-            dpg.add_text("Paste profile JSON data above", color=COLORS["text_muted"], font=12)
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
+            dpg.add_text("Paste profile JSON data above", color=COLORS["text_muted"])
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Import",
@@ -439,7 +438,7 @@ class ProfilesPage:
                 width=300,
                 default_value=f"{profile.get('name', 'profile')}_clone",
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Clone",

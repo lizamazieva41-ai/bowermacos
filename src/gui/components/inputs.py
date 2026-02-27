@@ -293,7 +293,7 @@ class FormField:
         if help_text:
             with dpg.group():
                 dpg.add_text(label_text, color=COLORS.get("text_secondary"))
-                dpg.add_text(help_text, color=COLORS.get("text_muted"), font=11)
+                dpg.add_text(help_text, color=COLORS.get("text_muted"))
         else:
             dpg.add_text(label_text, color=COLORS.get("text_secondary"))
         

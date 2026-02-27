@@ -17,29 +17,35 @@ class LoginPage:
         self.login_mode = "credentials"
 
     def create(self):
+        viewport_width = dpg.get_viewport_width()
+        viewport_height = dpg.get_viewport_height()
+        window_width = 450
+        window_height = 400
+        pos_x = (viewport_width - window_width) // 2
+        pos_y = (viewport_height - window_height) // 2
+        
         with dpg.window(
             label="Login",
             tag="login_window",
-            width=450,
-            height=400,
+            width=window_width,
+            height=window_height,
             no_resize=True,
             no_move=True,
             no_title_bar=True,
-            center=True,
+            pos=(pos_x, pos_y),
         ):
             self.window_id = "login_window"
 
             dpg.add_text(
                 "Bower Antidetect Browser",
                 color=COLORS["primary"],
-                font=24,
             )
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
 
             dpg.add_text("Login to your account", color=COLORS["text_secondary"])
 
             with dpg.group(tag="credentials_form"):
-                dpg.add_text("", height=10)
+                dpg.add_text(" ")
                 dpg.add_input_text(
                     label="Username",
                     tag="login_username",
@@ -53,7 +59,7 @@ class LoginPage:
                     password=True,
                     hint="Enter password",
                 )
-                dpg.add_text("", height=5)
+                dpg.add_text(" ")
                 dpg.add_button(
                     label="Login",
                     tag="login_btn",
@@ -62,14 +68,14 @@ class LoginPage:
                 )
 
             with dpg.group(tag="api_key_form", show=False):
-                dpg.add_text("", height=10)
+                dpg.add_text(" ")
                 dpg.add_input_text(
                     label="API Key",
                     tag="login_api_key",
                     width=300,
                     hint="Enter API key",
                 )
-                dpg.add_text("", height=5)
+                dpg.add_text(" ")
                 dpg.add_button(
                     label="Login with API Key",
                     tag="login_api_btn",
@@ -77,7 +83,7 @@ class LoginPage:
                     callback=self.login_with_api_key,
                 )
 
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             dpg.add_button(
                 label="Use API Key instead",
                 tag="switch_login_mode",

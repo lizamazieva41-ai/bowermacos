@@ -140,16 +140,16 @@ class ProfileGridCard:
             height=140,
         ):
             with dpg.group():
-                dpg.add_text(name, font=16)
-                dpg.add_text("", height=5)
+                dpg.add_text(name)
+                dpg.add_text(" ")
                 
-                dpg.add_text(f"Browser: {browser}", color=COLORS["text_secondary"], font=12)
+                dpg.add_text(f"Browser: {browser}", color=COLORS["text_secondary"])
                 dpg.add_text(f"Resolution: {profile.get('resolution', '1920x1080')}", 
-                           color=COLORS["text_secondary"], font=12)
+                           color=COLORS["text_secondary"])
                 
                 proxy = profile.get("proxy", "No proxy")
                 dpg.add_text(f"Proxy: {proxy[:25]}..." if len(proxy) > 25 else f"Proxy: {proxy}", 
-                           color=COLORS["text_secondary"], font=12)
+                           color=COLORS["text_secondary"])
                 
                 dpg.add_separator()
                 
@@ -198,13 +198,13 @@ class SessionGridCard:
         ):
             with dpg.group():
                 with dpg.group(horizontal=True):
-                    dpg.add_text(f"Session: {session_id[:20]}...", font=14)
+                    dpg.add_text(f"Session: {session_id[:20]}...")
                     dpg.add_text(f"● {status}", color=status_color)
                 
-                dpg.add_text("", height=5)
-                dpg.add_text(f"Profile: {profile_name}", color=COLORS["text_secondary"], font=12)
+                dpg.add_text(" ")
+                dpg.add_text(f"Profile: {profile_name}", color=COLORS["text_secondary"])
                 dpg.add_text(f"Started: {session.get('started_at', '')[:19]}", 
-                           color=COLORS["text_secondary"], font=12)
+                           color=COLORS["text_secondary"])
                 
                 dpg.add_separator()
                 

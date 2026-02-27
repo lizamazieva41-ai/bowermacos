@@ -10,7 +10,7 @@ from typing import Optional, List
 from sqlalchemy import String, Integer, Boolean, DateTime, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.db.store import Base
+from src.db.base import Base
 
 logger = logging.getLogger(__name__)
 

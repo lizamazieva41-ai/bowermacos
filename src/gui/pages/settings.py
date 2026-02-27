@@ -64,11 +64,10 @@ class SettingsPage:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Dashboard",
@@ -99,7 +98,7 @@ class SettingsPage:
             dpg.add_separator()
 
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text("Connected", color=COLORS["success"])
 
             dpg.add_button(
@@ -115,57 +114,57 @@ class SettingsPage:
             height=-1,
             border=False,
         ):
-            dpg.add_text("Settings", font=28)
+            dpg.add_text("Settings")
             dpg.add_text(
                 "Configure application settings",
                 color=COLORS["text_secondary"],
             )
             dpg.add_separator()
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.collapsing_header(label="API Configuration", default_open=True):
-                dpg.add_text("API Server URL", color=COLORS["text_secondary"], font=12)
+                dpg.add_text("API Server URL", color=COLORS["text_secondary"])
                 dpg.add_input_text(
                     tag="api_url",
                     default_value="http://localhost:8000",
                     width=300,
                 )
-                dpg.add_text("", height=10)
+                dpg.add_text(" ")
                 dpg.add_button(
                     label="Test Connection",
                     tag="test_connection_btn",
                     callback=self.test_connection,
                 )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.collapsing_header(label="Browser Settings", default_open=True):
-                dpg.add_text("Default Browser Engine", color=COLORS["text_secondary"], font=12)
+                dpg.add_text("Default Browser Engine", color=COLORS["text_secondary"])
                 dpg.add_combo(
                     tag="default_browser",
                     items=["chromium", "firefox", "webkit"],
                     default_value="chromium",
                     width=200,
                 )
-                dpg.add_text("", height=10)
-                dpg.add_text("Default Resolution", color=COLORS["text_secondary"], font=12)
+                dpg.add_text(" ")
+                dpg.add_text("Default Resolution", color=COLORS["text_secondary"])
                 dpg.add_combo(
                     tag="default_resolution",
                     items=["1920x1080", "1366x768", "1280x720", "2560x1440"],
                     default_value="1920x1080",
                     width=200,
                 )
-                dpg.add_text("", height=10)
+                dpg.add_text(" ")
                 dpg.add_checkbox(
                     tag="default_headless",
                     label="Default Headless Mode",
                     default_value=True,
                 )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.collapsing_header(label="Auto Refresh", default_open=True):
-                dpg.add_text("Auto Refresh Interval (seconds)", color=COLORS["text_secondary"], font=12)
+                dpg.add_text("Auto Refresh Interval (seconds)", color=COLORS["text_secondary"])
                 dpg.add_input_int(
                     tag="auto_refresh_interval",
                     default_value=30,
@@ -173,14 +172,14 @@ class SettingsPage:
                     min_value=5,
                     max_value=300,
                 )
-                dpg.add_text("", height=5)
+                dpg.add_text(" ")
                 dpg.add_checkbox(
                     tag="enable_auto_refresh",
                     label="Enable Auto Refresh",
                     default_value=True,
                 )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.collapsing_header(label="Save Settings", default_open=True):
                 dpg.add_button(
@@ -196,12 +195,12 @@ class SettingsPage:
                     width=150,
                 )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.collapsing_header(label="About", default_open=True):
-                dpg.add_text("Bower Antidetect Browser", color=COLORS["primary"], font=16)
+                dpg.add_text("Bower Antidetect Browser", color=COLORS["primary"])
                 dpg.add_text("Version 1.0.0", color=COLORS["text_secondary"])
-                dpg.add_text("", height=5)
+                dpg.add_text(" ")
                 dpg.add_text(
                     "A professional privacy browser with anti-detection capabilities.",
                     color=COLORS["text_secondary"],

@@ -37,11 +37,10 @@ class SessionsPage:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Dashboard",
@@ -72,7 +71,7 @@ class SessionsPage:
             dpg.add_separator()
 
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text("Connected", color=COLORS["success"])
 
             dpg.add_button(
@@ -89,7 +88,7 @@ class SessionsPage:
             border=False,
         ):
             with dpg.group(horizontal=True):
-                dpg.add_text("Sessions", font=28)
+                dpg.add_text("Sessions")
                 dpg.add_text("", width=-1)
                 
                 self.create_view_toggle()
@@ -105,7 +104,7 @@ class SessionsPage:
                     callback=self.show_session_actions_modal,
                 )
 
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.child_window(tag="sessions_list", height=-250):
                 dpg.add_text(
@@ -125,9 +124,9 @@ class SessionsPage:
                     dpg.add_table_column(label="Started")
                     dpg.add_table_column(label="Actions")
 
-            dpg.add_text("", height=10)
-            dpg.add_text("Session Controls", font=18)
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
+            dpg.add_text("Session Controls")
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_input_text(
@@ -143,7 +142,7 @@ class SessionsPage:
                     hint="https://example.com or JavaScript",
                 )
 
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -172,9 +171,9 @@ class SessionsPage:
                     callback=self.show_type_modal,
                 )
 
-            dpg.add_text("", height=10)
-            dpg.add_text("Console Output", font=16)
-            dpg.add_text("", height=5)
+            dpg.add_text(" ")
+            dpg.add_text("Console Output")
+            dpg.add_text(" ")
             with dpg.child_window(tag="console_output", height=150):
                 dpg.add_text(
                     "Console output will appear here...",
@@ -350,7 +349,7 @@ class SessionsPage:
                 width=300,
                 hint="#button-id or .class-name",
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Click",
@@ -389,7 +388,7 @@ class SessionsPage:
                 tag="type_text",
                 width=300,
             )
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             with dpg.group(horizontal=True):
                 dpg.add_button(
                     label="Type",

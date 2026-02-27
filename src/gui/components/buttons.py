@@ -61,7 +61,7 @@ class Button:
         with dpg.theme() as theme:
             with dpg.theme_component(dpg.mvButton):
                 dpg.add_theme_color(dpg.mvThemeCol_Button, colors["bg"])
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonHover, colors["hover"])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, colors["hover"])
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, colors["active"])
                 dpg.add_theme_color(dpg.mvThemeCol_Text, colors["text"])
         
@@ -175,7 +175,7 @@ class ButtonTransition:
             if dpg.does_item_exist(tag):
                 with dpg.theme() as theme:
                     with dpg.theme_component(dpg.mvButton):
-                        dpg.add_theme_color(dpg.mvThemeCol_ButtonHover, hover_color)
+                        dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, hover_color)
                 dpg.bind_item_theme(tag, theme)
         
         return on_hover
@@ -228,7 +228,7 @@ class ButtonTransition:
         with dpg.theme() as theme:
             with dpg.theme_component(dpg.mvButton):
                 dpg.add_theme_color(dpg.mvThemeCol_Button, colors["bg"])
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonHover, colors["hover"])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, colors["hover"])
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, colors["active"])
         
         dpg.bind_item_theme(btn, theme)
@@ -286,7 +286,7 @@ class LoadingButton:
                     dpg.add_theme_color(dpg.mvThemeCol_Button, colors["hover"])
                 else:
                     dpg.add_theme_color(dpg.mvThemeCol_Button, colors["bg"])
-                dpg.add_theme_color(dpg.mvThemeCol_ButtonHover, colors["hover"])
+                dpg.add_theme_color(dpg.mvThemeCol_ButtonHovered, colors["hover"])
                 dpg.add_theme_color(dpg.mvThemeCol_ButtonActive, colors["active"])
                 dpg.add_theme_color(dpg.mvThemeCol_Text, colors["text"])
         

@@ -319,30 +319,7 @@ show_warning("Warning message")
 show_info("Information")
 ```
 
-## Docker
-
-```bash
-# Build and run with Docker
-docker build -t bower-browser .
-docker run -p 8000:8000 bower-browser
-```
-
-Or use docker-compose:
-
-```bash
-docker-compose up -d
-```
-
-## CI/CD
-
-The project includes GitHub Actions workflow for automated testing and building:
-
-```bash
-# Workflow file: .github/workflows/ci-cd.yml
-# Runs: linting, type checking, unit tests, integration tests, Docker build
-```
-
-### GUI Features
+## Testing
 - Dashboard with session statistics
 - Profile management (create, edit, delete, clone)
 - Session management (start, stop, monitor)
@@ -358,20 +335,6 @@ The project includes GitHub Actions workflow for automated testing and building:
 - **Sessions** - Monitor active sessions
 - **Proxies** - Manage proxy servers
 - **Settings** - App configuration
-
-## Docker
-
-```bash
-# Build and run with Docker
-docker build -t bower-browser .
-docker run -p 8000:8000 bower-browser
-```
-
-Or use docker-compose:
-
-```bash
-docker-compose up -d
-```
 
 ## Testing
 

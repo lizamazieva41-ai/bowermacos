@@ -78,6 +78,18 @@ from src.gui.components.badge import (
     create_count_badge,
     create_tag
 )
+from src.gui.components.charts import (
+    LineChart,
+    BarChart,
+    PieChart,
+    GaugeChart,
+    Sparkline,
+    Heatmap,
+    ChartConfig,
+    create_line_chart,
+    create_bar_chart,
+    create_gauge,
+)
 
 __all__ = [
     # Buttons
@@ -146,15 +158,15 @@ __all__ = [
     "ProgressGroup",
     "create_progress_bar",
     "create_circular_progress",
-    # Badge
-    "Badge",
-    "BadgeVariant",
-    "BadgeSize",
-    "StatusBadge",
-    "CountBadge",
-    "Tag",
-    "create_badge",
-    "create_status_badge",
-    "create_count_badge",
-    "create_tag",
+    # Charts
+    "LineChart",
+    "BarChart",
+    "PieChart",
+    "GaugeChart",
+    "Sparkline",
+    "Heatmap",
+    "ChartConfig",
+    "create_line_chart",
+    "create_bar_chart",
+    "create_gauge",
 ]

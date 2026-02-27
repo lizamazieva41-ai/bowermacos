@@ -39,11 +39,10 @@ class DashboardPage:
             dpg.add_text(
                 "Bower",
                 color=COLORS["primary"],
-                font=28,
             )
-            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"], font=14)
+            dpg.add_text("Antidetect Browser", color=COLORS["text_secondary"])
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
 
             dpg.add_button(
                 label="Dashboard",
@@ -81,7 +80,7 @@ class DashboardPage:
             dpg.add_separator()
 
             with dpg.group():
-                dpg.add_text("API Status", color=COLORS["text_muted"], font=12)
+                dpg.add_text("API Status", color=COLORS["text_muted"])
                 dpg.add_text(
                     "Connected",
                     tag="api_status",
@@ -103,7 +102,7 @@ class DashboardPage:
             border=False,
         ):
             with dpg.group(horizontal=True):
-                dpg.add_text("Dashboard", font=28)
+                dpg.add_text("Dashboard")
                 dpg.add_text("", width=-1)
                 
                 self.create_view_toggle()
@@ -120,7 +119,7 @@ class DashboardPage:
                 color=COLORS["text_secondary"],
             )
             dpg.add_separator()
-            dpg.add_text("", height=15)
+            dpg.add_text(" ")
 
             with dpg.group(horizontal=True):
                 self.create_stat_card(
@@ -148,9 +147,9 @@ class DashboardPage:
                     (168, 85, 247),
                 )
 
-            dpg.add_text("", height=20)
-            dpg.add_text("Quick Actions", font=20)
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
+            dpg.add_text("Quick Actions")
+            dpg.add_text(" ")
 
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -178,9 +177,9 @@ class DashboardPage:
                     callback=lambda: self.navigate("settings"),
                 )
 
-            dpg.add_text("", height=20)
-            dpg.add_text("Recent Sessions", font=20)
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
+            dpg.add_text("Recent Sessions")
+            dpg.add_text(" ")
 
             with dpg.child_window(tag="recent_sessions", height=300):
                 dpg.add_text(
@@ -205,8 +204,8 @@ class DashboardPage:
             width=200,
             height=100,
         ):
-            dpg.add_text(title, color=COLORS["text_secondary"], font=12)
-            dpg.add_text(value, tag=tag, color=color, font=32)
+            dpg.add_text(title, color=COLORS["text_secondary"])
+            dpg.add_text(value, tag=tag, color=color)
 
     def navigate(self, page: str):
         self.app.show_page(page)

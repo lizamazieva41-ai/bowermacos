@@ -45,9 +45,9 @@ class Card:
         """Create a card with header."""
         with dpg.child_window(tag=tag, width=width, height=height):
             with dpg.group():
-                dpg.add_text(title, font=16)
+                dpg.add_text(title)
                 if subtitle:
-                    dpg.add_text(subtitle, color=COLORS.get("text_secondary"), font=12)
+                    dpg.add_text(subtitle, color=COLORS.get("text_secondary"))
                 dpg.add_separator()
                 
                 if action_button:
@@ -83,13 +83,13 @@ class StatCard:
             height=height,
         ):
             with dpg.group():
-                dpg.add_text(title, color=COLORS.get("text_secondary"), font=12)
-                dpg.add_text("", height=5)
+                dpg.add_text(title, color=COLORS.get("text_secondary"))
+                dpg.add_text(" ")
                 
                 with dpg.group(horizontal=True):
                     if icon:
-                        dpg.add_text(icon, font=24)
-                    dpg.add_text(value, tag=tag, color=color, font=32)
+                        dpg.add_text(icon)
+                    dpg.add_text(value, tag=tag, color=color)
         
         if on_click:
             dpg.set_item_callback(f"stat_card_{tag}", on_click)
@@ -134,14 +134,14 @@ class ProfileCard:
             height=height,
         ):
             with dpg.group():
-                dpg.add_text(profile_name, font=18)
-                dpg.add_text("", height=5)
+                dpg.add_text(profile_name)
+                dpg.add_text(" ")
                 
-                dpg.add_text(f"Browser: {browser}", color=COLORS.get("text_secondary"), font=12)
+                dpg.add_text(f"Browser: {browser}", color=COLORS.get("text_secondary"))
                 dpg.add_text(f"Proxy: {proxy[:30]}..." if len(proxy) > 30 else f"Proxy: {proxy}", 
-                           color=COLORS.get("text_secondary"), font=12)
+                           color=COLORS.get("text_secondary"))
                 dpg.add_text(f"Resolution: {profile.get('resolution', '1920x1080')}", 
-                           color=COLORS.get("text_secondary"), font=12)
+                           color=COLORS.get("text_secondary"))
                 
                 dpg.add_separator()
                 
@@ -215,12 +215,12 @@ class SessionCard:
         ):
             with dpg.group():
                 with dpg.group(horizontal=True):
-                    dpg.add_text(f"Session: {session_id[:16]}...", font=14)
+                    dpg.add_text(f"Session: {session_id[:16]}...")
                     dpg.add_text(f"● {status}", color=status_color)
                 
-                dpg.add_text("", height=5)
-                dpg.add_text(f"Profile: {profile_name}", color=COLORS.get("text_secondary"), font=12)
-                dpg.add_text(f"Started: {started_at}", color=COLORS.get("text_secondary"), font=12)
+                dpg.add_text(" ")
+                dpg.add_text(f"Profile: {profile_name}", color=COLORS.get("text_secondary"))
+                dpg.add_text(f"Started: {started_at}", color=COLORS.get("text_secondary"))
                 
                 dpg.add_separator()
                 
@@ -280,10 +280,10 @@ class ProxyCard:
         ):
             with dpg.group():
                 with dpg.group(horizontal=True):
-                    dpg.add_text(name, font=16)
+                    dpg.add_text(name)
                     dpg.add_text(f"● {health}", color=health_color)
                 
-                dpg.add_text(f"{proxy_type}://{host}:{port}", color=COLORS.get("text_secondary"), font=12)
+                dpg.add_text(f"{proxy_type}://{host}:{port}", color=COLORS.get("text_secondary"))
                 
                 dpg.add_separator()
                 
@@ -333,11 +333,11 @@ class QuickActionCard:
         ):
             with dpg.group():
                 with dpg.group(horizontal=True):
-                    dpg.add_text(icon, font=20)
-                    dpg.add_text(title, font=14)
+                    dpg.add_text(icon)
+                    dpg.add_text(title)
                 
-                dpg.add_text(description, color=COLORS.get("text_secondary"), font=11)
-                dpg.add_text("", height=10)
+                dpg.add_text(description, color=COLORS.get("text_secondary"))
+                dpg.add_text(" ")
                 dpg.add_button(
                     label="Go",
                     callback=callback,

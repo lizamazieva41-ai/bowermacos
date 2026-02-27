@@ -45,19 +45,19 @@ class ErrorDialog:
             icon = ErrorDialog._get_icon(error_type)
             color = ErrorDialog._get_color(error_type)
             
-            dpg.add_text(f"{icon} {title}", font=24, color=color)
-            dpg.add_text("", height=15)
+            dpg.add_text(f"{icon} {title}", color=color)
+            dpg.add_text(" ")
             
             dpg.add_text(message, wrap=450, color=COLORS["text_secondary"])
             
             if details:
-                dpg.add_text("", height=15)
-                dpg.add_text("Details:", font=14, color=COLORS["text_muted"])
-                dpg.add_text(details, wrap=450, color=COLORS["text_muted"], font=12)
+                dpg.add_text(" ")
+                dpg.add_text("Details:", color=COLORS["text_muted"])
+                dpg.add_text(details, wrap=450, color=COLORS["text_muted"])
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             if actions:
                 with dpg.group(horizontal=True):
@@ -119,8 +119,8 @@ class ConnectionErrorDialog:
             modal=True,
             pos=[150, 100],
         ):
-            dpg.add_text("🔌 Connection Failed", font=24, color=COLORS.get("warning"))
-            dpg.add_text("", height=15)
+            dpg.add_text("🔌 Connection Failed", color=COLORS.get("warning"))
+            dpg.add_text(" ")
             
             dpg.add_text(
                 "Unable to connect to the API server. Please check your connection and try again.",
@@ -128,9 +128,9 @@ class ConnectionErrorDialog:
                 color=COLORS["text_secondary"],
             )
             
-            dpg.add_text("", height=20)
-            dpg.add_text("Options:", font=16)
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
+            dpg.add_text("Options:")
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -149,11 +149,10 @@ class ConnectionErrorDialog:
                     width=180,
                 )
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_text(
                 "Tip: Check if the API server is running at the configured URL.",
                 color=COLORS["text_muted"],
-                font=12,
             )
 
 
@@ -178,8 +177,8 @@ class SessionCrashDialog:
             modal=True,
             pos=[150, 100],
         ):
-            dpg.add_text("💥 Session Crashed", font=24, color=COLORS.get("danger"))
-            dpg.add_text("", height=15)
+            dpg.add_text("💥 Session Crashed", color=COLORS.get("danger"))
+            dpg.add_text(" ")
             
             dpg.add_text(
                 "The browser session has crashed unexpectedly.",
@@ -187,14 +186,14 @@ class SessionCrashDialog:
             )
             
             if crash_details:
-                dpg.add_text("", height=10)
-                dpg.add_text("Crash Details:", font=14, color=COLORS["text_muted"])
+                dpg.add_text(" ")
+                dpg.add_text("Crash Details:", color=COLORS["text_muted"])
                 with dpg.child_window(height=100):
-                    dpg.add_text(crash_details, font=12, color=COLORS["text_muted"])
+                    dpg.add_text(crash_details, color=COLORS["text_muted"])
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             dpg.add_separator()
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 if on_view_log:
@@ -237,12 +236,12 @@ class AuthErrorDialog:
             modal=True,
             pos=[200, 150],
         ):
-            dpg.add_text("🔐 Auth Error", font=24, color=COLORS.get("warning"))
-            dpg.add_text("", height=15)
+            dpg.add_text("🔐 Auth Error", color=COLORS.get("warning"))
+            dpg.add_text(" ")
             
             dpg.add_text(message, wrap=400, color=COLORS["text_secondary"])
             
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -278,8 +277,8 @@ class ProxyErrorDialog:
             modal=True,
             pos=[150, 100],
         ):
-            dpg.add_text("🔗 Proxy Error", font=24, color=COLORS.get("warning"))
-            dpg.add_text("", height=15)
+            dpg.add_text("🔗 Proxy Error", color=COLORS.get("warning"))
+            dpg.add_text(" ")
             
             dpg.add_text(
                 f"The proxy '{proxy_url}' is not responding or invalid.",
@@ -287,9 +286,9 @@ class ProxyErrorDialog:
                 color=COLORS["text_secondary"],
             )
             
-            dpg.add_text("", height=20)
-            dpg.add_text("Would you like to:", font=16)
-            dpg.add_text("", height=10)
+            dpg.add_text(" ")
+            dpg.add_text("Would you like to:")
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 dpg.add_button(
@@ -334,7 +333,7 @@ class ConfirmDialog:
             pos=[200, 150],
         ):
             dpg.add_text(message, wrap=400, color=COLORS["text_secondary"])
-            dpg.add_text("", height=20)
+            dpg.add_text(" ")
             
             with dpg.group(horizontal=True):
                 btn_color = COLORS.get("danger") if danger else COLORS.get("primary")
@@ -372,7 +371,7 @@ class LoadingDialog:
             pos=[300, 200],
         ):
             with dpg.group():
-                dpg.add_text("⏳", font=32)
+                dpg.add_text("⏳")
                 dpg.add_text(message)
     
     @staticmethod
