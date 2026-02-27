@@ -11,6 +11,8 @@ from sqlalchemy import String, Integer, Boolean, DateTime, Text
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+from src.db.users import User, ApiKey, UserSession
+
 logger = logging.getLogger(__name__)
 
 
@@ -365,3 +367,176 @@ class Database:
 
     async def close(self):
         await self.engine.dispose()
+
+    async def create_user(self, user_data: dict) -> User:
+        async with self.session_maker() as session:
+            user = User(**user_data)
+            session.add(user)
+            await session.commit()
+            await session.refresh(user)
+            return user
+
+    async def get_user(self, user_id: int) -> Optional[User]:
+        async with self.session_maker() as session:
+            return await session.get(User, user_id)
+
+    async def get_user_by_username(self, username: str) -> Optional[User]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(User).where(User.username == username)
+            )
+            return result.scalar_one_or_none()
+
+    async def get_user_by_email(self, email: str) -> Optional[User]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(User).where(User.email == email)
+            )
+            return result.scalar_one_or_none()
+
+    async def list_users(self, skip: int = 0, limit: int = 100) -> List[User]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(User).offset(skip).limit(limit)
+            )
+            return list(result.scalars().all())
+
+    async def update_user(self, user_id: int, update_data: dict) -> Optional[User]:
+        async with self.session_maker() as session:
+            user = await session.get(User, user_id)
+            if user:
+                for key, value in update_data.items():
+                    setattr(user, key, value)
+                user.updated_at = datetime.utcnow()
+                await session.commit()
+                await session.refresh(user)
+            return user
+
+    async def delete_user(self, user_id: int) -> bool:
+        async with self.session_maker() as session:
+            user = await session.get(User, user_id)
+            if user:
+                await session.delete(user)
+                await session.commit()
+                return True
+            return False
+
+    async def create_api_key(self, api_key_data: dict) -> ApiKey:
+        async with self.session_maker() as session:
+            api_key = ApiKey(**api_key_data)
+            session.add(api_key)
+            await session.commit()
+            await session.refresh(api_key)
+            return api_key
+
+    async def get_api_key(self, api_key_id: int) -> Optional[ApiKey]:
+        async with self.session_maker() as session:
+            return await session.get(ApiKey, api_key_id)
+
+    async def get_api_key_by_hash(self, key_hash: str) -> Optional[ApiKey]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(ApiKey).where(ApiKey.key_hash == key_hash)
+            )
+            return result.scalar_one_or_none()
+
+    async def list_api_keys(self, user_id: Optional[int] = None) -> List[ApiKey]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            query = select(ApiKey)
+            if user_id:
+                query = query.where(ApiKey.user_id == user_id)
+
+            result = await session.execute(query)
+            return list(result.scalars().all())
+
+    async def update_api_key(self, api_key_id: int, update_data: dict) -> Optional[ApiKey]:
+        async with self.session_maker() as session:
+            api_key = await session.get(ApiKey, api_key_id)
+            if api_key:
+                for key, value in update_data.items():
+                    setattr(api_key, key, value)
+                api_key.updated_at = datetime.utcnow()
+                await session.commit()
+                await session.refresh(api_key)
+            return api_key
+
+    async def delete_api_key(self, api_key_id: int) -> bool:
+        async with self.session_maker() as session:
+            api_key = await session.get(ApiKey, api_key_id)
+            if api_key:
+                await session.delete(api_key)
+                await session.commit()
+                return True
+            return False
+
+    async def create_user_session(self, session_data: dict) -> UserSession:
+        async with self.session_maker() as session:
+            user_session = UserSession(**session_data)
+            session.add(user_session)
+            await session.commit()
+            await session.refresh(user_session)
+            return user_session
+
+    async def get_user_session(self, session_id: int) -> Optional[UserSession]:
+        async with self.session_maker() as session:
+            return await session.get(UserSession, session_id)
+
+    async def get_user_session_by_hash(self, token_hash: str) -> Optional[UserSession]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(UserSession).where(UserSession.token_hash == token_hash)
+            )
+            return result.scalar_one_or_none()
+
+    async def list_user_sessions(self, user_id: int) -> List[UserSession]:
+        async with self.session_maker() as session:
+            from sqlalchemy import select
+
+            result = await session.execute(
+                select(UserSession).where(UserSession.user_id == user_id)
+            )
+            return list(result.scalars().all())
+
+    async def update_user_session(self, session_id: int, update_data: dict) -> Optional[UserSession]:
+        async with self.session_maker() as session:
+            user_session = await session.get(UserSession, session_id)
+            if user_session:
+                for key, value in update_data.items():
+                    setattr(user_session, key, value)
+                user_session.last_activity_at = datetime.utcnow()
+                await session.commit()
+                await session.refresh(user_session)
+            return user_session
+
+    async def delete_user_session(self, session_id: int) -> bool:
+        async with self.session_maker() as session:
+            user_session = await session.get(UserSession, session_id)
+            if user_session:
+                await session.delete(user_session)
+                await session.commit()
+                return True
+            return False
+
+    async def deactivate_user_sessions(self, user_id: int) -> bool:
+        async with self.session_maker() as session:
+            from sqlalchemy import select, update
+
+            await session.execute(
+                update(UserSession)
+                .where(UserSession.user_id == user_id)
+                .values(is_active=False)
+            )
+            await session.commit()
+            return True

@@ -10,6 +10,7 @@ class SessionsPage:
     def __init__(self, app):
         self.app = app
         self.window_id = None
+        self.view_mode = "list"  # grid or list
 
     def create(self):
         with dpg.window(
@@ -87,15 +88,12 @@ class SessionsPage:
             height=-1,
             border=False,
         ):
-            dpg.add_text("Sessions", font=28)
-            dpg.add_text(
-                "Manage active browser sessions",
-                color=COLORS["text_secondary"],
-            )
-            dpg.add_separator()
-            dpg.add_text("", height=10)
-
             with dpg.group(horizontal=True):
+                dpg.add_text("Sessions", font=28)
+                dpg.add_text("", width=-1)
+                
+                self.create_view_toggle()
+                
                 dpg.add_button(
                     label="Refresh",
                     tag="refresh_sessions_btn",
@@ -191,6 +189,52 @@ class SessionsPage:
 
     def logout(self):
         self.app.logout()
+
+    def create_view_toggle(self):
+        """Create view toggle button (grid/list)."""
+        with dpg.group(horizontal=True):
+            grid_btn = dpg.add_button(
+                label="▦",
+                tag="sessions_view_grid",
+                width=35,
+                height=30,
+                callback=lambda: self.set_view_mode("grid"),
+            )
+            list_btn = dpg.add_button(
+                label="☰",
+                tag="sessions_view_list",
+                width=35,
+                height=30,
+                callback=lambda: self.set_view_mode("list"),
+            )
+        
+        self._update_view_toggle_styles()
+
+    def set_view_mode(self, mode: str):
+        """Set view mode and refresh display."""
+        self.view_mode = mode
+        self._update_view_toggle_styles()
+        self.refresh()
+
+    def _update_view_toggle_styles(self):
+        """Update view toggle button styles."""
+        active_color = COLORS.get("primary", (59, 130, 246))
+        inactive_color = (100, 100, 100)
+        
+        grid_color = active_color if self.view_mode == "grid" else inactive_color
+        list_color = active_color if self.view_mode == "list" else inactive_color
+        
+        if dpg.does_item_exist("sessions_view_grid"):
+            with dpg.theme() as theme:
+                with dpg.theme_component(dpg.mvButton):
+                    dpg.add_theme_color(dpg.mvThemeCol_Button, grid_color)
+            dpg.bind_item_theme("sessions_view_grid", theme)
+        
+        if dpg.does_item_exist("sessions_view_list"):
+            with dpg.theme() as theme:
+                with dpg.theme_component(dpg.mvButton):
+                    dpg.add_theme_color(dpg.mvThemeCol_Button, list_color)
+            dpg.bind_item_theme("sessions_view_list", theme)
 
     def refresh(self):
         try:

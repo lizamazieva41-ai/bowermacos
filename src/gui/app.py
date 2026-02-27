@@ -29,6 +29,10 @@ class BowerApp:
         self.auto_refresh_interval = 30
         self._last_refresh = 0
         
+        self.sidebar_collapsed = False
+        self.sidebar_width = 220
+        self.sidebar_collapsed_width = 64
+        
         self.pages = {}
         self.sidebar_id = None
 
@@ -141,6 +145,18 @@ class BowerApp:
         """Set auto-refresh settings."""
         self.auto_refresh_enabled = enabled
         self.auto_refresh_interval = interval
+    
+    def toggle_sidebar(self):
+        """Toggle sidebar collapsed state."""
+        self.sidebar_collapsed = not self.sidebar_collapsed
+        
+        for page in self.pages.values():
+            if hasattr(page, 'toggle_sidebar'):
+                page.toggle_sidebar()
+    
+    def get_sidebar_width(self) -> int:
+        """Get current sidebar width."""
+        return self.sidebar_collapsed_width if self.sidebar_collapsed else self.sidebar_width
 
     def cleanup(self):
         self.rt_manager.disconnect_all()

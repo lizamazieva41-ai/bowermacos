@@ -94,3 +94,79 @@ COLORS = {
     "text_secondary": (148, 163, 184),
     "text_muted": (100, 116, 139),
 }
+
+
+FONTS = {
+    "primary": "Inter",
+    "monospace": "JetBrains Mono",
+    "fallback": "-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif",
+    "mono_fallback": "Consolas, Monaco, 'Courier New', monospace",
+}
+
+
+TYPE_SCALE = {
+    "display_lg": {"size": 48, "weight": 700, "line_height": 1.2},
+    "display_md": {"size": 36, "weight": 600, "line_height": 1.25},
+    "h1": {"size": 28, "weight": 700, "line_height": 1.3},
+    "h2": {"size": 24, "weight": 600, "line_height": 1.35},
+    "h3": {"size": 20, "weight": 600, "line_height": 1.4},
+    "h4": {"size": 18, "weight": 600, "line_height": 1.4},
+    "body_lg": {"size": 16, "weight": 400, "line_height": 1.5},
+    "body": {"size": 14, "weight": 400, "line_height": 1.5},
+    "body_sm": {"size": 13, "weight": 400, "line_height": 1.5},
+    "label": {"size": 12, "weight": 500, "line_height": 1.4},
+    "caption": {"size": 11, "weight": 400, "line_height": 1.4},
+}
+
+
+SPACING = {
+    "0": 0,
+    "1": 4,
+    "2": 8,
+    "3": 12,
+    "4": 16,
+    "5": 20,
+    "6": 24,
+    "8": 32,
+    "10": 40,
+    "12": 48,
+    "16": 64,
+}
+
+
+BORDER_RADIUS = {
+    "none": 0,
+    "sm": 4,
+    "default": 6,
+    "md": 8,
+    "lg": 12,
+    "xl": 16,
+    "full": 9999,
+}
+
+
+SHADOWS = {
+    "sm": "0 1px 2px 0 rgba(0, 0, 0, 0.05)",
+    "default": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+    "md": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+    "lg": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+    "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+}
+
+
+TRANSITIONS = {
+    "fast": "150ms ease",
+    "default": "200ms ease",
+    "slow": "300ms ease",
+}
+
+
+Z_INDEX = {
+    "dropdown": 1000,
+    "sticky": 1020,
+    "fixed": 1030,
+    "modal_backdrop": 1040,
+    "modal": 1050,
+    "popover": 1060,
+    "tooltip": 1070,
+}

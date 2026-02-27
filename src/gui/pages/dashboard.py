@@ -10,6 +10,8 @@ class DashboardPage:
     def __init__(self, app):
         self.app = app
         self.window_id = None
+        self.view_mode = "grid"  # grid or list
+        self._view_toggle = None
         self.sidebar_id = None
 
     def create(self):
@@ -100,7 +102,19 @@ class DashboardPage:
             height=-1,
             border=False,
         ):
-            dpg.add_text("Dashboard", font=28)
+            with dpg.group(horizontal=True):
+                dpg.add_text("Dashboard", font=28)
+                dpg.add_text("", width=-1)
+                
+                self.create_view_toggle()
+                
+                dpg.add_button(
+                    label="🔄",
+                    tag="refresh_dashboard_btn",
+                    width=35,
+                    callback=self.refresh,
+                )
+            
             dpg.add_text(
                 "Overview of your browser profiles and sessions",
                 color=COLORS["text_secondary"],
@@ -140,22 +154,35 @@ class DashboardPage:
 
             with dpg.group(horizontal=True):
                 dpg.add_button(
-                    label="New Profile",
+                    label="➕ New Profile",
                     tag="quick_new_profile",
                     width=150,
                     callback=lambda: self.navigate("profiles"),
                 )
                 dpg.add_button(
-                    label="Refresh Data",
-                    tag="refresh_btn",
+                    label="🌐 New Session",
+                    tag="quick_new_session",
                     width=150,
-                    callback=self.refresh,
+                    callback=lambda: self.navigate("profiles"),
+                )
+                dpg.add_button(
+                    label="🔗 Add Proxy",
+                    tag="quick_add_proxy",
+                    width=150,
+                    callback=lambda: self.navigate("proxies"),
+                )
+                dpg.add_button(
+                    label="⚙️ Settings",
+                    tag="quick_settings",
+                    width=150,
+                    callback=lambda: self.navigate("settings"),
                 )
 
             dpg.add_text("", height=20)
+            dpg.add_text("Recent Sessions", font=20)
+            dpg.add_text("", height=10)
 
             with dpg.child_window(tag="recent_sessions", height=300):
-                dpg.add_text("Recent Sessions", font=20)
                 dpg.add_text(
                     "No active sessions",
                     tag="no_sessions_text",
@@ -188,6 +215,52 @@ class DashboardPage:
 
     def logout(self):
         self.app.logout()
+
+    def create_view_toggle(self):
+        """Create view toggle button (grid/list)."""
+        with dpg.group(horizontal=True):
+            grid_btn = dpg.add_button(
+                label="▦",
+                tag="dashboard_view_grid",
+                width=35,
+                height=30,
+                callback=lambda: self.set_view_mode("grid"),
+            )
+            list_btn = dpg.add_button(
+                label="☰",
+                tag="dashboard_view_list",
+                width=35,
+                height=30,
+                callback=lambda: self.set_view_mode("list"),
+            )
+        
+        self._update_view_toggle_styles()
+
+    def set_view_mode(self, mode: str):
+        """Set view mode and refresh display."""
+        self.view_mode = mode
+        self._update_view_toggle_styles()
+        self.refresh()
+
+    def _update_view_toggle_styles(self):
+        """Update view toggle button styles."""
+        active_color = COLORS.get("primary", (59, 130, 246))
+        inactive_color = (100, 100, 100)
+        
+        grid_color = active_color if self.view_mode == "grid" else inactive_color
+        list_color = active_color if self.view_mode == "list" else inactive_color
+        
+        if dpg.does_item_exist("dashboard_view_grid"):
+            with dpg.theme() as theme:
+                with dpg.theme_component(dpg.mvButton):
+                    dpg.add_theme_color(dpg.mvThemeCol_Button, grid_color)
+            dpg.bind_item_theme("dashboard_view_grid", theme)
+        
+        if dpg.does_item_exist("dashboard_view_list"):
+            with dpg.theme() as theme:
+                with dpg.theme_component(dpg.mvButton):
+                    dpg.add_theme_color(dpg.mvThemeCol_Button, list_color)
+            dpg.bind_item_theme("dashboard_view_list", theme)
 
     def refresh(self):
         try:

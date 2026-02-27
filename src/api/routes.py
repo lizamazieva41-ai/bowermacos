@@ -1002,3 +1002,215 @@ async def get_proxy_health() -> ApiResponse:
 
     health = proxy_health_monitor.get_health_summary()
     return ApiResponse.ok(data=health)
+
+
+class UserCreateRequest(BaseModel):
+    username: str
+    email: Optional[str] = None
+    password: str
+    role: str = "user"
+
+
+class UserUpdateRequest(BaseModel):
+    email: Optional[str] = None
+    password: Optional[str] = None
+    role: Optional[str] = None
+    is_active: Optional[bool] = None
+
+
+class UserResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    username: str
+    email: Optional[str]
+    role: str
+    is_active: bool
+    is_superuser: bool
+    created_at: datetime
+    last_login: Optional[datetime]
+
+
+class UserListResponse(BaseModel):
+    users: list[UserResponse]
+    total: int
+
+
+class ApiKeyCreateRequest(BaseModel):
+    name: str
+    description: Optional[str] = None
+    permissions: Optional[str] = None
+    days_valid: int = 365
+
+
+class ApiKeyResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str]
+    permissions: Optional[str]
+    is_active: bool
+    expires_at: Optional[datetime]
+    created_at: datetime
+    last_used_at: Optional[datetime]
+
+
+class ApiKeyListResponse(BaseModel):
+    api_keys: list[ApiKeyResponse]
+    total: int
+
+
+def _user_from_db_to_response(user) -> UserResponse:
+    return UserResponse(
+        id=user.id,
+        username=user.username,
+        email=user.email,
+        role=user.role,
+        is_active=user.is_active,
+        is_superuser=user.is_superuser,
+        created_at=user.created_at,
+        last_login=user.last_login,
+    )
+
+
+@app.post("/api/v1/users", status_code=status.HTTP_201_CREATED)
+@limiter.limit("10/minute")
+async def create_user(request: Request, user_data: UserCreateRequest):
+    from src.api.auth import create_user as auth_create_user
+
+    try:
+        user = await auth_create_user(user_data)
+        return ApiResponse.ok(
+            data=_user_from_db_to_response(user).model_dump(),
+            message="User created successfully",
+        )
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.get("/api/v1/users", dependencies=[Depends(get_current_user)])
+@limiter.limit("60/minute")
+async def list_users(
+    request: Request,
+    skip: int = 0,
+    limit: int = 100,
+) -> ApiResponse:
+    from src.api.auth import list_users as auth_list_users
+
+    users = await auth_list_users(skip, limit)
+    return ApiResponse.ok(
+        data=UserListResponse(
+            users=[_user_from_db_to_response(u) for u in users],
+            total=len(users),
+        ).model_dump()
+    )
+
+
+@app.get("/api/v1/users/{user_id}", dependencies=[Depends(get_current_user)])
+async def get_user(request: Request, user_id: int) -> ApiResponse:
+    from src.api.auth import get_user as auth_get_user
+
+    user = await auth_get_user(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+    return ApiResponse.ok(data=_user_from_db_to_response(user).model_dump())
+
+
+@app.put("/api/v1/users/{user_id}", dependencies=[Depends(get_current_user)])
+async def update_user(
+    request: Request,
+    user_id: int,
+    user_update: UserUpdateRequest,
+) -> ApiResponse:
+    from src.api.auth import update_user as auth_update_user
+
+    user = await auth_update_user(user_id, user_update)
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+    return ApiResponse.ok(
+        data=_user_from_db_to_response(user).model_dump(),
+        message="User updated successfully",
+    )
+
+
+@app.delete("/api/v1/users/{user_id}", dependencies=[Depends(get_current_user)])
+async def delete_user(request: Request, user_id: int) -> ApiResponse:
+    from src.api.auth import delete_user as auth_delete_user
+
+    success = await auth_delete_user(user_id)
+    if not success:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+    return ApiResponse.ok(message="User deleted successfully")
+
+
+@app.post("/api/v1/users/{user_id}/api-keys", dependencies=[Depends(get_current_user)])
+@limiter.limit("20/minute")
+async def create_user_api_key(
+    request: Request,
+    user_id: int,
+    key_data: ApiKeyCreateRequest,
+) -> ApiResponse:
+    from src.api.auth import generate_api_key
+
+    user = await database.get_user(user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail=f"User {user_id} not found")
+
+    key, db_key = await generate_api_key(
+        user_id=user_id,
+        name=key_data.name,
+        description=key_data.description,
+        permissions=key_data.permissions,
+        days_valid=key_data.days_valid,
+    )
+
+    return ApiResponse.ok(
+        data={
+            "api_key": key,
+            "id": db_key.id,
+            "name": db_key.name,
+            "expires_at": db_key.expires_at.isoformat() if db_key.expires_at else None,
+        },
+        message="API key created successfully",
+    )
+
+
+@app.get("/api/v1/users/{user_id}/api-keys", dependencies=[Depends(get_current_user)])
+async def list_user_api_keys(request: Request, user_id: int) -> ApiResponse:
+    from src.api.auth import list_user_api_keys as auth_list_keys
+
+    keys = await auth_list_keys(user_id)
+    return ApiResponse.ok(
+        data=ApiKeyListResponse(
+            api_keys=[
+                ApiKeyResponse(
+                    id=k.id,
+                    name=k.name,
+                    description=k.description,
+                    permissions=k.permissions,
+                    is_active=k.is_active,
+                    expires_at=k.expires_at,
+                    created_at=k.created_at,
+                    last_used_at=k.last_used_at,
+                )
+                for k in keys
+            ],
+            total=len(keys),
+        ).model_dump()
+    )
+
+
+@app.delete(
+    "/api/v1/users/{user_id}/api-keys/{api_key_id}",
+    dependencies=[Depends(get_current_user)],
+)
+async def delete_user_api_key(
+    request: Request,
+    user_id: int,
+    api_key_id: int,
+) -> ApiResponse:
+    from src.api.auth import deactivate_api_key
+
+    success = await deactivate_api_key(api_key_id)
+    if not success:
+        raise HTTPException(status_code=404, detail=f"API key {api_key_id} not found")
+    return ApiResponse.ok(message="API key deactivated successfully")
