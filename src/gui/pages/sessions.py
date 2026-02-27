@@ -95,15 +95,21 @@ class SessionsPage:
             dpg.add_separator()
             dpg.add_text("", height=10)
 
-            dpg.add_button(
-                label="Refresh",
-                tag="refresh_sessions_btn",
-                callback=self.refresh,
-            )
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Refresh",
+                    tag="refresh_sessions_btn",
+                    callback=self.refresh,
+                )
+                dpg.add_button(
+                    label="Session Actions",
+                    tag="session_actions_btn",
+                    callback=self.show_session_actions_modal,
+                )
 
             dpg.add_text("", height=15)
 
-            with dpg.child_window(tag="sessions_list", height=-60):
+            with dpg.child_window(tag="sessions_list", height=-250):
                 dpg.add_text(
                     "No active sessions. Create a profile and start a session.",
                     tag="no_sessions_text",
@@ -120,6 +126,63 @@ class SessionsPage:
                     dpg.add_table_column(label="Status")
                     dpg.add_table_column(label="Started")
                     dpg.add_table_column(label="Actions")
+
+            dpg.add_text("", height=10)
+            dpg.add_text("Session Controls", font=18)
+            dpg.add_text("", height=5)
+            
+            with dpg.group(horizontal=True):
+                dpg.add_input_text(
+                    label="Session ID",
+                    tag="action_session_id",
+                    width=250,
+                    hint="Enter session ID",
+                )
+                dpg.add_input_text(
+                    label="URL / Script",
+                    tag="action_input",
+                    width=400,
+                    hint="https://example.com or JavaScript",
+                )
+
+            dpg.add_text("", height=10)
+            
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Navigate",
+                    tag="navigate_btn",
+                    callback=self.do_navigate,
+                )
+                dpg.add_button(
+                    label="Screenshot",
+                    tag="screenshot_btn",
+                    callback=self.do_screenshot,
+                )
+                dpg.add_button(
+                    label="Execute JS",
+                    tag="execute_btn",
+                    callback=self.do_execute,
+                )
+                dpg.add_button(
+                    label="Click",
+                    tag="click_btn",
+                    callback=self.show_click_modal,
+                )
+                dpg.add_button(
+                    label="Type Text",
+                    tag="type_btn",
+                    callback=self.show_type_modal,
+                )
+
+            dpg.add_text("", height=10)
+            dpg.add_text("Console Output", font=16)
+            dpg.add_text("", height=5)
+            with dpg.child_window(tag="console_output", height=150):
+                dpg.add_text(
+                    "Console output will appear here...",
+                    tag="console_text",
+                    color=COLORS["text_muted"],
+                )
 
     def navigate(self, page: str):
         self.app.show_page(page)
@@ -176,6 +239,146 @@ class SessionsPage:
             self.refresh()
         except Exception as e:
             print(f"Error closing session: {e}")
+
+    def show_session_actions_modal(self):
+        session_id = dpg.get_value("action_session_id")
+        if not session_id:
+            print("Please enter a session ID")
+            return
+        
+        try:
+            session = self.app.api_client.get_session(session_id)
+            if session:
+                print(f"Session: {session.get('session_id')}, Status: {session.get('status')}")
+            else:
+                print("Session not found")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def do_navigate(self):
+        session_id = dpg.get_value("action_session_id")
+        url = dpg.get_value("action_input")
+        
+        if not session_id or not url:
+            print("Please enter session ID and URL")
+            return
+        
+        try:
+            self.app.api_client.navigate(session_id, url)
+            self.update_console(f"Navigated to: {url}")
+        except Exception as e:
+            self.update_console(f"Error: {e}")
+
+    def do_screenshot(self):
+        import datetime
+        session_id = dpg.get_value("action_session_id")
+        
+        if not session_id:
+            print("Please enter session ID")
+            return
+        
+        try:
+            filename = f"screenshot_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+            self.app.api_client.screenshot(session_id, filename)
+            self.update_console(f"Screenshot saved: {filename}")
+        except Exception as e:
+            self.update_console(f"Error: {e}")
+
+    def do_execute(self):
+        session_id = dpg.get_value("action_session_id")
+        script = dpg.get_value("action_input")
+        
+        if not session_id or not script:
+            print("Please enter session ID and script")
+            return
+        
+        try:
+            result = self.app.api_client.execute_script(session_id, script)
+            self.update_console(f"Result: {result}")
+        except Exception as e:
+            self.update_console(f"Error: {e}")
+
+    def show_click_modal(self):
+        with dpg.modal(tag="click_modal", label="Click Element"):
+            dpg.add_input_text(
+                label="Selector",
+                tag="click_selector",
+                width=300,
+                hint="#button-id or .class-name",
+            )
+            dpg.add_text("", height=10)
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Click",
+                    callback=self.do_click,
+                )
+                dpg.add_button(
+                    label="Cancel",
+                    callback=lambda: dpg.close_modal("click_modal"),
+                )
+
+    def do_click(self):
+        session_id = dpg.get_value("action_session_id")
+        selector = dpg.get_value("click_selector")
+        
+        if not session_id or not selector:
+            print("Please enter session ID and selector")
+            return
+        
+        try:
+            self.app.api_client.click(session_id, selector)
+            dpg.close_modal("click_modal")
+            self.update_console(f"Clicked: {selector}")
+        except Exception as e:
+            self.update_console(f"Error: {e}")
+
+    def show_type_modal(self):
+        with dpg.modal(tag="type_modal", label="Type Text"):
+            dpg.add_input_text(
+                label="Selector",
+                tag="type_selector",
+                width=300,
+                hint="#input-id",
+            )
+            dpg.add_input_text(
+                label="Text",
+                tag="type_text",
+                width=300,
+            )
+            dpg.add_text("", height=10)
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Type",
+                    callback=self.do_type,
+                )
+                dpg.add_button(
+                    label="Cancel",
+                    callback=lambda: dpg.close_modal("type_modal"),
+                )
+
+    def do_type(self):
+        session_id = dpg.get_value("action_session_id")
+        selector = dpg.get_value("type_selector")
+        text = dpg.get_value("type_text")
+        
+        if not session_id or not selector or not text:
+            print("Please enter session ID, selector, and text")
+            return
+        
+        try:
+            self.app.api_client.type_text(session_id, selector, text)
+            dpg.close_modal("type_modal")
+            self.update_console(f"Typed: {text} into {selector}")
+        except Exception as e:
+            self.update_console(f"Error: {e}")
+
+    def update_console(self, message: str):
+        if dpg.does_item_exist("console_text"):
+            current = dpg.get_value("console_text")
+            if "Console output will appear here..." in current:
+                current = ""
+            new_text = f"{current}\n{message}"[-1000:]
+            dpg.set_value("console_text", new_text)
 
     def show(self):
         if self.window_id:

@@ -131,5 +131,73 @@ class GUIClient:
     def get_health(self) -> Dict:
         return self.get("/health")
 
+    def export_profile(self, profile_id: int) -> Optional[Dict]:
+        """Export profile to JSON."""
+        result = self.get(f"/api/v1/profiles/{profile_id}/export")
+        if result.get("success"):
+            return result.get("data", {})
+        return None
+
+    def import_profile(self, profile_data: Dict) -> Dict:
+        """Import profile from JSON data."""
+        return self.post("/api/v1/profiles/import", profile_data)
+
+    def get_session(self, session_id: str) -> Optional[Dict]:
+        """Get session details."""
+        result = self.get(f"/api/v1/sessions/{session_id}")
+        if result.get("success"):
+            return result.get("data", {})
+        return None
+
+    def navigate(self, session_id: str, url: str) -> Dict:
+        """Navigate session to URL."""
+        return self.post(f"/api/v1/sessions/{session_id}/navigate", {"url": url})
+
+    def screenshot(self, session_id: str, path: str = "screenshot.png") -> Dict:
+        """Take screenshot."""
+        return self.post(f"/api/v1/sessions/{session_id}/screenshot", {"path": path})
+
+    def execute_script(self, session_id: str, script: str) -> Any:
+        """Execute JavaScript in session."""
+        result = self.post(f"/api/v1/sessions/{session_id}/execute", {"script": script})
+        return result.get("data", {}).get("result")
+
+    def click(self, session_id: str, selector: str) -> Dict:
+        """Click element in session."""
+        return self.post(f"/api/v1/sessions/{session_id}/click", {"selector": selector})
+
+    def type_text(self, session_id: str, selector: str, text: str) -> Dict:
+        """Type text into element."""
+        return self.post(f"/api/v1/sessions/{session_id}/type", {"selector": selector, "text": text})
+
+    def get_page_source(self, session_id: str) -> Optional[str]:
+        """Get page HTML source."""
+        result = self.get(f"/api/v1/sessions/{session_id}/page-source")
+        if result.get("success"):
+            return result.get("data", {}).get("page_source")
+        return None
+
+    def wait_for_selector(self, session_id: str, selector: str, timeout: int = 30000) -> Dict:
+        """Wait for selector."""
+        return self.post(f"/api/v1/sessions/{session_id}/wait-for-selector", {"selector": selector, "timeout": timeout})
+
+    def get_proxy_health(self) -> Dict:
+        """Get proxy health status."""
+        result = self.get("/api/v1/proxies/health")
+        if result.get("success"):
+            return result.get("data", {})
+        return {}
+
+    def get_audit_logs(self, limit: int = 50) -> List[Dict]:
+        """Get audit logs."""
+        result = self.get(f"/api/v1/audit?limit={limit}")
+        if result.get("success"):
+            return result.get("data", {}).get("logs", [])
+        return []
+
+    def get_recovery_status(self) -> Dict:
+        """Get session recovery status."""
+        return self.get("/api/v1/recovery/status")
+
     def close(self):
         pass

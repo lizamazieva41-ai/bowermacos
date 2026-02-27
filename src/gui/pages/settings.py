@@ -233,6 +233,15 @@ class SettingsPage:
         }
         self._save_config(config)
         self.app.api_client.base_url = config["api_url"]
+        
+        if hasattr(self.app, 'set_auto_refresh'):
+            self.app.set_auto_refresh(
+                config["enable_auto_refresh"], 
+                config["auto_refresh_interval"]
+            )
+        
+        if hasattr(self.app, 'show_notification'):
+            self.app.show_notification("Settings saved successfully!", "success")
         print("Settings saved successfully!")
 
     def reset_settings(self):
@@ -265,6 +274,13 @@ class SettingsPage:
     def show(self):
         if self.window_id:
             dpg.show_item(self.window_id)
+            self.load_settings()
+            
+            if hasattr(self.app, 'set_auto_refresh'):
+                config = self._load_config()
+                enabled = config.get("enable_auto_refresh", True)
+                interval = config.get("auto_refresh_interval", 30)
+                self.app.set_auto_refresh(enabled, interval)
 
     def hide(self):
         if self.window_id:

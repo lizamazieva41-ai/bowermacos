@@ -105,6 +105,22 @@ class ProxiesPage:
                 tag="refresh_proxies_btn",
                 callback=self.refresh,
             )
+            dpg.add_button(
+                label="Check Health",
+                tag="check_health_btn",
+                callback=self.check_health,
+            )
+
+            dpg.add_text("", height=10)
+            
+            with dpg.collapsing_header(label="Proxy Health Summary", default_open=True):
+                with dpg.group(horizontal=True):
+                    dpg.add_text("Total:", color=COLORS["text_secondary"])
+                    dpg.add_text("0", tag="proxy_total_count")
+                    dpg.add_text("  Healthy:", color=COLORS["text_secondary"])
+                    dpg.add_text("0", tag="proxy_healthy_count", color=COLORS["success"])
+                    dpg.add_text("  Unhealthy:", color=COLORS["text_secondary"])
+                    dpg.add_text("0", tag="proxy_unhealthy_count", color=COLORS["danger"])
 
             dpg.add_text("", height=15)
 
@@ -212,8 +228,31 @@ class ProxiesPage:
         try:
             proxies = self.app.api_client.get_proxies()
             self.update_proxies_table(proxies)
+            self.update_health_summary(proxies)
         except Exception as e:
             print(f"Error refreshing proxies: {e}")
+
+    def check_health(self):
+        """Check health of all proxies."""
+        try:
+            health = self.app.api_client.get_proxy_health()
+            print(f"Proxy health: {health}")
+            self.refresh()
+        except Exception as e:
+            print(f"Error checking proxy health: {e}")
+
+    def update_health_summary(self, proxies):
+        """Update proxy health summary counters."""
+        total = len(proxies)
+        healthy = sum(1 for p in proxies if p.get("health_status") == "healthy")
+        unhealthy = sum(1 for p in proxies if p.get("health_status") == "unhealthy")
+        
+        if dpg.does_item_exist("proxy_total_count"):
+            dpg.set_value("proxy_total_count", str(total))
+        if dpg.does_item_exist("proxy_healthy_count"):
+            dpg.set_value("proxy_healthy_count", str(healthy))
+        if dpg.does_item_exist("proxy_unhealthy_count"):
+            dpg.set_value("proxy_unhealthy_count", str(unhealthy))
 
     def update_proxies_table(self, proxies):
         table = "proxies_table"

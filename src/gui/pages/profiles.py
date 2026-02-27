@@ -101,6 +101,11 @@ class ProfilesPage:
                 callback=self.show_create_modal,
             )
             dpg.add_button(
+                label="Import Profile",
+                tag="import_profile_btn",
+                callback=self.show_import_modal,
+            )
+            dpg.add_button(
                 label="Refresh",
                 tag="refresh_profiles_btn",
                 callback=self.refresh,
@@ -255,6 +260,18 @@ class ProfilesPage:
                         callback=lambda: self.start_session(profile.get("id")),
                     )
                     dpg.add_button(
+                        label="Clone",
+                        tag=f"clone_profile_{profile.get('id')}",
+                        small=True,
+                        callback=lambda: self.show_clone_modal(profile),
+                    )
+                    dpg.add_button(
+                        label="Export",
+                        tag=f"export_profile_{profile.get('id')}",
+                        small=True,
+                        callback=lambda: self.export_profile(profile.get("id")),
+                    )
+                    dpg.add_button(
                         label="Edit",
                         tag=f"edit_profile_{profile.get('id')}",
                         small=True,
@@ -362,6 +379,89 @@ class ProfilesPage:
             self.refresh()
         except Exception as e:
             print(f"Error deleting profile: {e}")
+
+    def show_import_modal(self):
+        with dpg.modal(tag="import_profile_modal", label="Import Profile"):
+            dpg.add_input_text(
+                label="Profile JSON",
+                tag="import_profile_json",
+                width=400,
+                height=200,
+            )
+            dpg.add_text("", height=10)
+            dpg.add_text("Paste profile JSON data above", color=COLORS["text_muted"], font=12)
+            dpg.add_text("", height=10)
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Import",
+                    callback=self.import_profile,
+                )
+                dpg.add_button(
+                    label="Cancel",
+                    callback=lambda: dpg.close_modal("import_profile_modal"),
+                )
+
+    def import_profile(self):
+        import json
+        json_str = dpg.get_value("import_profile_json")
+        if not json_str:
+            return
+        
+        try:
+            profile_data = json.loads(json_str)
+            self.app.api_client.import_profile(profile_data)
+            dpg.close_modal("import_profile_modal")
+            self.refresh()
+            print("Profile imported successfully!")
+        except json.JSONDecodeError as e:
+            print(f"Invalid JSON: {e}")
+        except Exception as e:
+            print(f"Error importing profile: {e}")
+
+    def export_profile(self, profile_id: int):
+        try:
+            result = self.app.api_client.export_profile(profile_id)
+            if result:
+                import json
+                import datetime
+                filename = f"profile_{profile_id}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
+                with open(filename, 'w') as f:
+                    json.dump(result, f, indent=2)
+                print(f"Profile exported to: {filename}")
+        except Exception as e:
+            print(f"Error exporting profile: {e}")
+
+    def show_clone_modal(self, profile):
+        with dpg.modal(tag="clone_profile_modal", label="Clone Profile"):
+            dpg.add_input_text(
+                label="New Profile Name",
+                tag="clone_profile_name",
+                width=300,
+                default_value=f"{profile.get('name', 'profile')}_clone",
+            )
+            dpg.add_text("", height=10)
+            with dpg.group(horizontal=True):
+                dpg.add_button(
+                    label="Clone",
+                    callback=lambda: self.clone_profile(profile.get("id")),
+                )
+                dpg.add_button(
+                    label="Cancel",
+                    callback=lambda: dpg.close_modal("clone_profile_modal"),
+                )
+
+    def clone_profile(self, profile_id: int):
+        new_name = dpg.get_value("clone_profile_name")
+        if not new_name:
+            return
+        
+        try:
+            self.app.api_client.clone_profile(profile_id, new_name)
+            dpg.close_modal("clone_profile_modal")
+            self.refresh()
+            print(f"Profile cloned as: {new_name}")
+        except Exception as e:
+            print(f"Error cloning profile: {e}")
 
     def show(self):
         if self.window_id:
